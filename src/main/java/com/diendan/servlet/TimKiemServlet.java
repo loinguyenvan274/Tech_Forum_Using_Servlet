@@ -1,0 +1,44 @@
+package com.diendan.servlet;
+
+import com.diendan.bo.CauHoiBO;
+import com.diendan.dao.CauHoiDAO;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.List;
+
+/**
+ * Servlet Controller để tìm kiếm câu hỏi
+ */
+@WebServlet("/timkiem")
+public class TimKiemServlet extends HttpServlet {
+    private CauHoiDAO cauHoiDAO;
+    
+    @Override
+    public void init() throws ServletException {
+        cauHoiDAO = CauHoiDAO.getInstance();
+    }
+    
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html; charset=UTF-8");
+        
+        // Lấy từ khóa tìm kiếm
+        String tuKhoa = request.getParameter("q");
+        
+        // Tìm kiếm câu hỏi
+        List<CauHoiBO> danhSachCauHoi = cauHoiDAO.timKiemCauHoi(tuKhoa);
+        
+        // Gửi dữ liệu sang View
+        request.setAttribute("danhSachCauHoi", danhSachCauHoi);
+        request.setAttribute("tuKhoa", tuKhoa);
+        request.getRequestDispatcher("/WEB-INF/views/timkiem.jsp").forward(request, response);
+    }
+}
