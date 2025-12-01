@@ -1,7 +1,7 @@
 package com.diendan.servlet;
 
-import com.diendan.bo.CauHoiBO;
-import com.diendan.bo.TraLoiBO;
+import com.diendan.bean.CauHoi;
+import com.diendan.bean.TraLoi;
 import com.diendan.dao.CauHoiDAO;
 import com.diendan.dao.TraLoiDAO;
 
@@ -47,7 +47,7 @@ public class ChiTietCauHoiServlet extends HttpServlet {
             int maCauHoi = Integer.parseInt(maCauHoiStr);
             
             // Lấy thông tin câu hỏi
-            CauHoiBO cauHoi = cauHoiDAO.layCauHoiTheoMa(maCauHoi);
+            CauHoi cauHoi = cauHoiDAO.layCauHoiTheoMa(maCauHoi);
             
             if (cauHoi == null) {
                 response.sendRedirect(request.getContextPath() + "/");
@@ -55,7 +55,7 @@ public class ChiTietCauHoiServlet extends HttpServlet {
             }
             
             // Lấy danh sách trả lời
-            List<TraLoiBO> danhSachTraLoi = traLoiDAO.layDanhSachTraLoiTheoCauHoi(maCauHoi);
+            List<TraLoi> danhSachTraLoi = traLoiDAO.layDanhSachTraLoiTheoCauHoi(maCauHoi);
             
             // Gửi dữ liệu sang View
             request.setAttribute("cauHoi", cauHoi);

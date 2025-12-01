@@ -1,4 +1,4 @@
-package com.diendan.bo;
+package com.diendan.bean;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -6,7 +6,7 @@ import java.util.Date;
 /**
  * Class Business Object đại diện cho Người Dùng trong hệ thống
  */
-public class NguoiDungBO implements Serializable {
+public class NguoiDung implements Serializable {
     private static final long serialVersionUID = 1L;
     
     private int maNguoiDung;
@@ -18,14 +18,14 @@ public class NguoiDungBO implements Serializable {
     /**
      * Constructor mặc định
      */
-    public NguoiDungBO() {
+    public NguoiDung() {
         this.ngayThamGia = new Date();
     }
     
     /**
      * Constructor đầy đủ tham số
      */
-    public NguoiDungBO(int maNguoiDung, String tenDangNhap, String tenHienThi, String email) {
+    public NguoiDung(int maNguoiDung, String tenDangNhap, String tenHienThi, String email) {
         this.maNguoiDung = maNguoiDung;
         this.tenDangNhap = tenDangNhap;
         this.tenHienThi = tenHienThi;

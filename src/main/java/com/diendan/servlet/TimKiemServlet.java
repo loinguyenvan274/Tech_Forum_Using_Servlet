@@ -1,6 +1,6 @@
 package com.diendan.servlet;
 
-import com.diendan.bo.CauHoiBO;
+import com.diendan.bean.CauHoi;
 import com.diendan.dao.CauHoiDAO;
 
 import javax.servlet.ServletException;
@@ -34,7 +34,7 @@ public class TimKiemServlet extends HttpServlet {
         String tuKhoa = request.getParameter("q");
         
         // Tìm kiếm câu hỏi
-        List<CauHoiBO> danhSachCauHoi = cauHoiDAO.timKiemCauHoi(tuKhoa);
+        List<CauHoi> danhSachCauHoi = cauHoiDAO.timKiemCauHoi(tuKhoa);
         
         // Gửi dữ liệu sang View
         request.setAttribute("danhSachCauHoi", danhSachCauHoi);

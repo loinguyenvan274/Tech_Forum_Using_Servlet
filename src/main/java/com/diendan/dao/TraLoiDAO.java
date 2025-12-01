@@ -1,7 +1,7 @@
 package com.diendan.dao;
 
-import com.diendan.bo.TraLoiBO;
-import java.util.ArrayList;
+import com.diendan.bean.TraLoi;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
  */
 public class TraLoiDAO {
     private static TraLoiDAO instance;
-    private Map<Integer, TraLoiBO> danhSachTraLoi;
+    private Map<Integer, TraLoi> danhSachTraLoi;
     private int maTuDong;
     
     /**
@@ -40,7 +40,7 @@ public class TraLoiDAO {
      * Thêm dữ liệu trả lời mẫu
      */
     private void themTraLoiMau() {
-        themTraLoi(new TraLoiBO(0, 1,
+        themTraLoi(new TraLoi(0, 1,
             "Để kết nối Java với MySQL, bạn cần làm các bước sau:\n\n" +
             "1. Thêm MySQL JDBC Driver vào project (mysql-connector-java)\n" +
             "2. Load driver: Class.forName(\"com.mysql.cj.jdbc.Driver\")\n" +
@@ -49,11 +49,11 @@ public class TraLoiDAO {
             "Chúc bạn thành công!",
             2, "Trần Thị B"));
         
-        themTraLoi(new TraLoiBO(0, 1,
+        themTraLoi(new TraLoi(0, 1,
             "Bạn cũng nên sử dụng PreparedStatement thay vì Statement để tránh SQL Injection nhé!",
             1, "Nguyễn Văn A"));
         
-        themTraLoi(new TraLoiBO(0, 2,
+        themTraLoi(new TraLoi(0, 2,
             "Abstract class và Interface khác nhau như sau:\n\n" +
             "Abstract Class:\n" +
             "- Có thể có cả phương thức abstract và concrete\n" +
@@ -71,7 +71,7 @@ public class TraLoiDAO {
     /**
      * Thêm trả lời mới
      */
-    public synchronized TraLoiBO themTraLoi(TraLoiBO traLoi) {
+    public synchronized TraLoi themTraLoi(TraLoi traLoi) {
         traLoi.setMaTraLoi(maTuDong++);
         danhSachTraLoi.put(traLoi.getMaTraLoi(), traLoi);
         
@@ -85,7 +85,7 @@ public class TraLoiDAO {
     /**
      * Lấy danh sách trả lời theo mã câu hỏi
      */
-    public List<TraLoiBO> layDanhSachTraLoiTheoCauHoi(int maCauHoi) {
+    public List<TraLoi> layDanhSachTraLoiTheoCauHoi(int maCauHoi) {
         return danhSachTraLoi.values().stream()
             .filter(tl -> tl.getMaCauHoi() == maCauHoi)
             .sorted((t1, t2) -> t1.getNgayTraLoi().compareTo(t2.getNgayTraLoi()))
@@ -95,7 +95,7 @@ public class TraLoiDAO {
     /**
      * Lấy trả lời theo mã
      */
-    public TraLoiBO layTraLoiTheoMa(int maTraLoi) {
+    public TraLoi layTraLoiTheoMa(int maTraLoi) {
         return danhSachTraLoi.get(maTraLoi);
     }
 }

@@ -1,6 +1,6 @@
 package com.diendan.dao;
 
-import com.diendan.bo.NguoiDungBO;
+import com.diendan.bean.NguoiDung;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.Map;
  */
 public class NguoiDungDAO {
     private static NguoiDungDAO instance;
-    private Map<Integer, NguoiDungBO> danhSachNguoiDung;
+    private Map<Integer, NguoiDung> danhSachNguoiDung;
     private int maTuDong;
     
     /**
@@ -39,15 +39,15 @@ public class NguoiDungDAO {
      * Thêm dữ liệu người dùng mẫu
      */
     private void themNguoiDungMau() {
-        themNguoiDung(new NguoiDungBO(0, "admin", "Quản Trị Viên", "admin@diendan.com"));
-        themNguoiDung(new NguoiDungBO(0, "nguoidung1", "Nguyễn Văn A", "nguyenvana@email.com"));
-        themNguoiDung(new NguoiDungBO(0, "nguoidung2", "Trần Thị B", "tranthib@email.com"));
+        themNguoiDung(new NguoiDung(0, "admin", "Quản Trị Viên", "admin@diendan.com"));
+        themNguoiDung(new NguoiDung(0, "nguoidung1", "Nguyễn Văn A", "nguyenvana@email.com"));
+        themNguoiDung(new NguoiDung(0, "nguoidung2", "Trần Thị B", "tranthib@email.com"));
     }
     
     /**
      * Thêm người dùng mới
      */
-    public synchronized NguoiDungBO themNguoiDung(NguoiDungBO nguoiDung) {
+    public synchronized NguoiDung themNguoiDung(NguoiDung nguoiDung) {
         nguoiDung.setMaNguoiDung(maTuDong++);
         danhSachNguoiDung.put(nguoiDung.getMaNguoiDung(), nguoiDung);
         return nguoiDung;
@@ -56,14 +56,14 @@ public class NguoiDungDAO {
     /**
      * Lấy người dùng theo mã
      */
-    public NguoiDungBO layNguoiDungTheoMa(int maNguoiDung) {
+    public NguoiDung layNguoiDungTheoMa(int maNguoiDung) {
         return danhSachNguoiDung.get(maNguoiDung);
     }
     
     /**
      * Lấy tất cả người dùng
      */
-    public List<NguoiDungBO> layTatCaNguoiDung() {
+    public List<NguoiDung> layTatCaNguoiDung() {
         return new ArrayList<>(danhSachNguoiDung.values());
     }
 }

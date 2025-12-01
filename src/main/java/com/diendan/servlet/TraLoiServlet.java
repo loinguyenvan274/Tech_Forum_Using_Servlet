@@ -1,6 +1,6 @@
 package com.diendan.servlet;
 
-import com.diendan.bo.TraLoiBO;
+import com.diendan.bean.TraLoi;
 import com.diendan.dao.TraLoiDAO;
 
 import javax.servlet.ServletException;
@@ -54,7 +54,7 @@ public class TraLoiServlet extends HttpServlet {
             int maCauHoi = Integer.parseInt(maCauHoiStr);
             
             // Tạo trả lời mới
-            TraLoiBO traLoi = new TraLoiBO();
+            TraLoi traLoi = new TraLoi();
             traLoi.setMaCauHoi(maCauHoi);
             traLoi.setNoiDung(noiDung.trim());
             traLoi.setTenNguoiTraLoi(tenNguoiTraLoi.trim());

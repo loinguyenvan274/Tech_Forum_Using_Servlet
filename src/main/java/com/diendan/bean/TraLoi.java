@@ -1,4 +1,4 @@
-package com.diendan.bo;
+package com.diendan.bean;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -6,7 +6,7 @@ import java.util.Date;
 /**
  * Class Business Object đại diện cho Câu Trả Lời
  */
-public class TraLoiBO implements Serializable {
+public class TraLoi implements Serializable {
     private static final long serialVersionUID = 1L;
     
     private int maTraLoi;
@@ -19,14 +19,14 @@ public class TraLoiBO implements Serializable {
     /**
      * Constructor mặc định
      */
-    public TraLoiBO() {
+    public TraLoi() {
         this.ngayTraLoi = new Date();
     }
     
     /**
      * Constructor đầy đủ tham số
      */
-    public TraLoiBO(int maTraLoi, int maCauHoi, String noiDung, int maNguoiTraLoi, String tenNguoiTraLoi) {
+    public TraLoi(int maTraLoi, int maCauHoi, String noiDung, int maNguoiTraLoi, String tenNguoiTraLoi) {
         this.maTraLoi = maTraLoi;
         this.maCauHoi = maCauHoi;
         this.noiDung = noiDung;

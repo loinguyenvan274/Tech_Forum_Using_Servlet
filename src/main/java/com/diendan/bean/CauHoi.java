@@ -1,4 +1,4 @@
-package com.diendan.bo;
+package com.diendan.bean;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Class Business Object đại diện cho Câu Hỏi trong diễn đàn
  */
-public class CauHoiBO implements Serializable {
+public class CauHoi implements Serializable {
     private static final long serialVersionUID = 1L;
     
     private int maCauHoi;
@@ -23,7 +23,7 @@ public class CauHoiBO implements Serializable {
     /**
      * Constructor mặc định
      */
-    public CauHoiBO() {
+    public CauHoi() {
         this.ngayDang = new Date();
         this.danhSachTag = new ArrayList<>();
         this.soLuongTraLoi = 0;
@@ -32,7 +32,7 @@ public class CauHoiBO implements Serializable {
     /**
      * Constructor đầy đủ tham số
      */
-    public CauHoiBO(int maCauHoi, String tieuDe, String noiDung, int maNguoiHoi, String tenNguoiHoi) {
+    public CauHoi(int maCauHoi, String tieuDe, String noiDung, int maNguoiHoi, String tenNguoiHoi) {
         this.maCauHoi = maCauHoi;
         this.tieuDe = tieuDe;
         this.noiDung = noiDung;

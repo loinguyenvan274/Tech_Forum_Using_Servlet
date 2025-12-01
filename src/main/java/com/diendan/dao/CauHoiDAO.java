@@ -1,7 +1,7 @@
 package com.diendan.dao;
 
-import com.diendan.bo.CauHoiBO;
-import java.util.ArrayList;
+import com.diendan.bean.CauHoi;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
  */
 public class CauHoiDAO {
     private static CauHoiDAO instance;
-    private Map<Integer, CauHoiBO> danhSachCauHoi;
+    private Map<Integer, CauHoi> danhSachCauHoi;
     private int maTuDong;
     
     /**
@@ -41,21 +41,21 @@ public class CauHoiDAO {
      * Thêm dữ liệu câu hỏi mẫu
      */
     private void themCauHoiMau() {
-        CauHoiBO cauHoi1 = new CauHoiBO(0, 
+        CauHoi cauHoi1 = new CauHoi(0,
             "Làm thế nào để kết nối Java với MySQL?",
             "Tôi đang học lập trình Java và muốn kết nối với cơ sở dữ liệu MySQL. Xin hỏi các bạn cần những bước nào và thư viện gì để thực hiện điều này? Tôi đã thử tìm hiểu nhưng vẫn còn khá mơ hồ.",
             1, "Nguyễn Văn A");
         cauHoi1.setDanhSachTag(Arrays.asList("java", "mysql", "database"));
         themCauHoi(cauHoi1);
         
-        CauHoiBO cauHoi2 = new CauHoiBO(0,
+        CauHoi cauHoi2 = new CauHoi(0,
             "Sự khác biệt giữa abstract class và interface trong Java?",
             "Mình đang tìm hiểu về lập trình hướng đối tượng trong Java. Có thể giải thích rõ sự khác biệt giữa abstract class và interface không? Khi nào thì nên dùng cái nào?",
             2, "Trần Thị B");
         cauHoi2.setDanhSachTag(Arrays.asList("java", "oop", "interface"));
         themCauHoi(cauHoi2);
         
-        CauHoiBO cauHoi3 = new CauHoiBO(0,
+        CauHoi cauHoi3 = new CauHoi(0,
             "Làm sao để deploy ứng dụng Java lên server?",
             "Em có một ứng dụng web Java sử dụng Servlet và JSP. Giờ em muốn đưa lên server để mọi người có thể truy cập. Các anh chị có thể hướng dẫn các bước deploy không ạ?",
             1, "Nguyễn Văn A");
@@ -66,7 +66,7 @@ public class CauHoiDAO {
     /**
      * Thêm câu hỏi mới
      */
-    public synchronized CauHoiBO themCauHoi(CauHoiBO cauHoi) {
+    public synchronized CauHoi themCauHoi(CauHoi cauHoi) {
         cauHoi.setMaCauHoi(maTuDong++);
         danhSachCauHoi.put(cauHoi.getMaCauHoi(), cauHoi);
         return cauHoi;
@@ -75,14 +75,14 @@ public class CauHoiDAO {
     /**
      * Lấy câu hỏi theo mã
      */
-    public CauHoiBO layCauHoiTheoMa(int maCauHoi) {
+    public CauHoi layCauHoiTheoMa(int maCauHoi) {
         return danhSachCauHoi.get(maCauHoi);
     }
     
     /**
      * Lấy tất cả câu hỏi (sắp xếp theo ngày đăng mới nhất)
      */
-    public List<CauHoiBO> layTatCaCauHoi() {
+    public List<CauHoi> layTatCaCauHoi() {
         return danhSachCauHoi.values().stream()
             .sorted((c1, c2) -> c2.getNgayDang().compareTo(c1.getNgayDang()))
             .collect(Collectors.toList());
@@ -91,12 +91,13 @@ public class CauHoiDAO {
     /**
      * Tìm kiếm câu hỏi theo từ khóa trong tiêu đề hoặc nội dung
      */
-    public List<CauHoiBO> timKiemCauHoi(String tuKhoa) {
+    public List<CauHoi> timKiemCauHoi(String tuKhoa) {
         if (tuKhoa == null || tuKhoa.trim().isEmpty()) {
             return layTatCaCauHoi();
         }
         
         String tuKhoaLowerCase = tuKhoa.toLowerCase();
+
         return danhSachCauHoi.values().stream()
             .filter(ch -> ch.getTieuDe().toLowerCase().contains(tuKhoaLowerCase) ||
                          ch.getNoiDung().toLowerCase().contains(tuKhoaLowerCase))
@@ -108,7 +109,7 @@ public class CauHoiDAO {
      * Cập nhật số lượng trả lời của câu hỏi
      */
     public synchronized void capNhatSoLuongTraLoi(int maCauHoi, int soLuong) {
-        CauHoiBO cauHoi = danhSachCauHoi.get(maCauHoi);
+        CauHoi cauHoi = danhSachCauHoi.get(maCauHoi);
         if (cauHoi != null) {
             cauHoi.setSoLuongTraLoi(soLuong);
         }

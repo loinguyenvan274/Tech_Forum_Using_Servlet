@@ -1,6 +1,6 @@
 package com.diendan.servlet;
 
-import com.diendan.bo.CauHoiBO;
+import com.diendan.bean.CauHoi;
 import com.diendan.dao.CauHoiDAO;
 
 import javax.servlet.ServletException;
@@ -32,7 +32,7 @@ public class DanhSachCauHoiServlet extends HttpServlet {
         response.setContentType("text/html; charset=UTF-8");
         
         // Lấy danh sách tất cả câu hỏi
-        List<CauHoiBO> danhSachCauHoi = cauHoiDAO.layTatCaCauHoi();
+        List<CauHoi> danhSachCauHoi = cauHoiDAO.layTatCaCauHoi();
         
         // Gửi dữ liệu sang View (JSP)
         request.setAttribute("danhSachCauHoi", danhSachCauHoi);

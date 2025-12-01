@@ -1,6 +1,6 @@
 package com.diendan.servlet;
 
-import com.diendan.bo.CauHoiBO;
+import com.diendan.bean.CauHoi;
 import com.diendan.dao.CauHoiDAO;
 
 import javax.servlet.ServletException;
@@ -67,7 +67,7 @@ public class DangCauHoiServlet extends HttpServlet {
         }
         
         // Tạo câu hỏi mới
-        CauHoiBO cauHoi = new CauHoiBO();
+        CauHoi cauHoi = new CauHoi();
         cauHoi.setTieuDe(tieuDe.trim());
         cauHoi.setNoiDung(noiDung.trim());
         cauHoi.setTenNguoiHoi(tenNguoiHoi.trim());
