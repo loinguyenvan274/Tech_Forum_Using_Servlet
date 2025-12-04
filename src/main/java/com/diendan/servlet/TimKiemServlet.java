@@ -34,7 +34,7 @@ public class TimKiemServlet extends HttpServlet {
         String tuKhoa = request.getParameter("q");
         
         // Tìm kiếm câu hỏi
-        List<CauHoi> danhSachCauHoi = cauHoiDAO.timKiemCauHoi(tuKhoa);
+        List<CauHoi> danhSachCauHoi = cauHoiDAO.timKiem(tuKhoa,tuKhoa);
         
         // Gửi dữ liệu sang View
         request.setAttribute("danhSachCauHoi", danhSachCauHoi);

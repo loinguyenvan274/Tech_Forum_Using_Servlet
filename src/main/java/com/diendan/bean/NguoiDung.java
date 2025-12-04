@@ -3,9 +3,6 @@ package com.diendan.bean;
 import java.io.Serializable;
 import java.util.Date;
 
-/**
- * Class Business Object đại diện cho Người Dùng trong hệ thống
- */
 public class NguoiDung implements Serializable {
     private static final long serialVersionUID = 1L;
     
@@ -14,25 +11,39 @@ public class NguoiDung implements Serializable {
     private String tenHienThi;
     private String email;
     private Date ngayThamGia;
-    
-    /**
-     * Constructor mặc định
-     */
+    private String matKhau;
+
     public NguoiDung() {
         this.ngayThamGia = new Date();
     }
-    
-    /**
-     * Constructor đầy đủ tham số
-     */
-    public NguoiDung(int maNguoiDung, String tenDangNhap, String tenHienThi, String email) {
+
+    public NguoiDung(int maNguoiDung, String tenDangNhap, String tenHienThi, String email,String matKhau) {
         this.maNguoiDung = maNguoiDung;
         this.tenDangNhap = tenDangNhap;
         this.tenHienThi = tenHienThi;
         this.email = email;
         this.ngayThamGia = new Date();
+        this.matKhau = matKhau;
+
     }
-    
+
+    public NguoiDung(int maNguoiDung, String tenDangNhap, String tenHienThi, String email, Date ngayThamGia, String matKhau) {
+        this.maNguoiDung = maNguoiDung;
+        this.tenDangNhap = tenDangNhap;
+        this.tenHienThi = tenHienThi;
+        this.email = email;
+        this.ngayThamGia = ngayThamGia;
+        this.matKhau = matKhau;
+    }
+
+    public String getMatKhau() {
+        return matKhau;
+    }
+
+    public void setMatKhau(String matKhau) {
+        this.matKhau = matKhau;
+    }
+
     // Getters và Setters
     public int getMaNguoiDung() {
         return maNguoiDung;

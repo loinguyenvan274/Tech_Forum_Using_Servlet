@@ -13,9 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-/**
- * Servlet Controller để hiển thị chi tiết câu hỏi và danh sách trả lời
- */
+
 @WebServlet("/chitiet")
 public class ChiTietCauHoiServlet extends HttpServlet {
     private CauHoiDAO cauHoiDAO;

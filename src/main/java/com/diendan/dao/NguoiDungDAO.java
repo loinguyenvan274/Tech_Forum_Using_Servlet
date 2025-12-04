@@ -1,33 +1,20 @@
 package com.diendan.dao;
 
 import com.diendan.bean.NguoiDung;
+
+import java.sql.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Class DAO để quản lý dữ liệu Người Dùng (in-memory storage)
- */
 public class NguoiDungDAO {
     private static NguoiDungDAO instance;
-    private Map<Integer, NguoiDung> danhSachNguoiDung;
-    private int maTuDong;
     
-    /**
-     * Constructor private để implement Singleton pattern
-     */
     private NguoiDungDAO() {
-        danhSachNguoiDung = new HashMap<>();
-        maTuDong = 1;
-        
-        // Thêm một số dữ liệu mẫu
-        themNguoiDungMau();
     }
     
-    /**
-     * Lấy instance duy nhất của NguoiDungDAO
-     */
     public static synchronized NguoiDungDAO getInstance() {
         if (instance == null) {
             instance = new NguoiDungDAO();
@@ -35,35 +22,74 @@ public class NguoiDungDAO {
         return instance;
     }
     
-    /**
-     * Thêm dữ liệu người dùng mẫu
-     */
-    private void themNguoiDungMau() {
-        themNguoiDung(new NguoiDung(0, "admin", "Quản Trị Viên", "admin@diendan.com"));
-        themNguoiDung(new NguoiDung(0, "nguoidung1", "Nguyễn Văn A", "nguyenvana@email.com"));
-        themNguoiDung(new NguoiDung(0, "nguoidung2", "Trần Thị B", "tranthib@email.com"));
-    }
     
-    /**
-     * Thêm người dùng mới
-     */
-    public synchronized NguoiDung themNguoiDung(NguoiDung nguoiDung) {
-        nguoiDung.setMaNguoiDung(maTuDong++);
-        danhSachNguoiDung.put(nguoiDung.getMaNguoiDung(), nguoiDung);
+    public  NguoiDung themNguoiDung(NguoiDung nguoiDung) {
+        String sql = "INSERT INTO nguoi_dung(tenDangNhap, tenHienThi, email, ngayThamGia, matKhau) values(?,?,?,?,?)";
+        try(Connection conn = DBConnect.getConnection()) {
+            try (PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+                ps.setString(1, nguoiDung.getTenDangNhap());
+                ps.setString(2, nguoiDung.getTenHienThi());
+                ps.setString(3, nguoiDung.getEmail());
+                ps.setTimestamp(4, new Timestamp(System.currentTimeMillis()));
+                ps.setString(5, nguoiDung.getMatKhau());
+
+                int affected = ps.executeUpdate();
+                try (ResultSet keys = ps.getGeneratedKeys()) {
+                    if (keys.next()) {
+                        nguoiDung.setMaNguoiDung(keys.getInt(1));
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         return nguoiDung;
     }
     
-    /**
-     * Lấy người dùng theo mã
-     */
     public NguoiDung layNguoiDungTheoMa(int maNguoiDung) {
-        return danhSachNguoiDung.get(maNguoiDung);
+        String sql = "SELECT * from nguoi_dung WHERE maNguoiDung = ?";
+        try(Connection conn = DBConnect.getConnection()){
+            try(PreparedStatement ps = conn.prepareStatement(sql)){
+                ps.setString(1,String.valueOf(maNguoiDung));
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                       return new NguoiDung(rs.getInt("maNguoiDung"),rs.getString("tenDangNhap"),rs.getString("tenHienThi"),rs.getString("email"),rs.getDate("ngayThamGia"),rs.getString("matKhau"));
+
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return  null;
     }
     
-    /**
-     * Lấy tất cả người dùng
-     */
     public List<NguoiDung> layTatCaNguoiDung() {
-        return new ArrayList<>(danhSachNguoiDung.values());
+        List<NguoiDung> tatCaNguoiDung = new ArrayList<>();
+        String sql = "SELECT * FROM nguoi_dung";
+
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                NguoiDung nguoiDung = new NguoiDung(
+                        rs.getInt("maNguoiDung"),
+                        rs.getString("tenDangNhap"),
+                        rs.getString("tenHienThi"),
+                        rs.getString("email"),
+                        rs.getDate("ngayThamGia"),
+                        rs.getString("matKhau")
+                );
+
+                tatCaNguoiDung.add(nguoiDung);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return tatCaNguoiDung;
     }
+
 }

@@ -5,9 +5,7 @@ import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Class Business Object đại diện cho Câu Hỏi trong diễn đàn
- */
+
 public class CauHoi implements Serializable {
     private static final long serialVersionUID = 1L;
     
@@ -20,18 +18,13 @@ public class CauHoi implements Serializable {
     private List<String> danhSachTag;
     private int soLuongTraLoi;
     
-    /**
-     * Constructor mặc định
-     */
+
     public CauHoi() {
         this.ngayDang = new Date();
         this.danhSachTag = new ArrayList<>();
         this.soLuongTraLoi = 0;
     }
     
-    /**
-     * Constructor đầy đủ tham số
-     */
     public CauHoi(int maCauHoi, String tieuDe, String noiDung, int maNguoiHoi, String tenNguoiHoi) {
         this.maCauHoi = maCauHoi;
         this.tieuDe = tieuDe;
@@ -43,7 +36,6 @@ public class CauHoi implements Serializable {
         this.soLuongTraLoi = 0;
     }
     
-    // Getters và Setters
     public int getMaCauHoi() {
         return maCauHoi;
     }
@@ -108,9 +100,7 @@ public class CauHoi implements Serializable {
         this.soLuongTraLoi = soLuongTraLoi;
     }
     
-    /**
-     * Lấy tóm tắt nội dung câu hỏi (200 ký tự đầu)
-     */
+
     public String getTomTatNoiDung() {
         if (noiDung == null) return "";
         if (noiDung.length() <= 200) return noiDung;

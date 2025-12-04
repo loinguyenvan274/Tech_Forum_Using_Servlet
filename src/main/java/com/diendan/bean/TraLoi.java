@@ -2,10 +2,7 @@ package com.diendan.bean;
 
 import java.io.Serializable;
 import java.util.Date;
-
-/**
- * Class Business Object đại diện cho Câu Trả Lời
- */
+ 
 public class TraLoi implements Serializable {
     private static final long serialVersionUID = 1L;
     
@@ -16,16 +13,11 @@ public class TraLoi implements Serializable {
     private String tenNguoiTraLoi;
     private Date ngayTraLoi;
     
-    /**
-     * Constructor mặc định
-     */
+
     public TraLoi() {
         this.ngayTraLoi = new Date();
     }
     
-    /**
-     * Constructor đầy đủ tham số
-     */
     public TraLoi(int maTraLoi, int maCauHoi, String noiDung, int maNguoiTraLoi, String tenNguoiTraLoi) {
         this.maTraLoi = maTraLoi;
         this.maCauHoi = maCauHoi;
@@ -35,7 +27,6 @@ public class TraLoi implements Serializable {
         this.ngayTraLoi = new Date();
     }
     
-    // Getters và Setters
     public int getMaTraLoi() {
         return maTraLoi;
     }

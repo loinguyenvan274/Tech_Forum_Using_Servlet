@@ -6,29 +6,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.Comparator;
 
 /**
  * Class DAO để quản lý dữ liệu Câu Trả Lời (in-memory storage)
  */
 public class TraLoiDAO {
     private static TraLoiDAO instance;
-    private Map<Integer, TraLoi> danhSachTraLoi;
-    private int maTuDong;
-    
-    /**
-     * Constructor private để implement Singleton pattern
-     */
     private TraLoiDAO() {
-        danhSachTraLoi = new HashMap<>();
-        maTuDong = 1;
-        
-        // Thêm một số trả lời mẫu
-        themTraLoiMau();
     }
     
-    /**
-     * Lấy instance duy nhất của TraLoiDAO
-     */
     public static synchronized TraLoiDAO getInstance() {
         if (instance == null) {
             instance = new TraLoiDAO();
@@ -36,66 +25,73 @@ public class TraLoiDAO {
         return instance;
     }
     
-    /**
-     * Thêm dữ liệu trả lời mẫu
-     */
-    private void themTraLoiMau() {
-        themTraLoi(new TraLoi(0, 1,
-            "Để kết nối Java với MySQL, bạn cần làm các bước sau:\n\n" +
-            "1. Thêm MySQL JDBC Driver vào project (mysql-connector-java)\n" +
-            "2. Load driver: Class.forName(\"com.mysql.cj.jdbc.Driver\")\n" +
-            "3. Tạo kết nối: Connection conn = DriverManager.getConnection(url, username, password)\n" +
-            "4. Thực hiện query với Statement hoặc PreparedStatement\n\n" +
-            "Chúc bạn thành công!",
-            2, "Trần Thị B"));
-        
-        themTraLoi(new TraLoi(0, 1,
-            "Bạn cũng nên sử dụng PreparedStatement thay vì Statement để tránh SQL Injection nhé!",
-            1, "Nguyễn Văn A"));
-        
-        themTraLoi(new TraLoi(0, 2,
-            "Abstract class và Interface khác nhau như sau:\n\n" +
-            "Abstract Class:\n" +
-            "- Có thể có cả phương thức abstract và concrete\n" +
-            "- Có thể có biến instance\n" +
-            "- Sử dụng extends, chỉ kế thừa được 1 class\n\n" +
-            "Interface:\n" +
-            "- Chỉ có phương thức abstract (trước Java 8)\n" +
-            "- Chỉ có hằng số (static final)\n" +
-            "- Sử dụng implements, có thể implement nhiều interface\n\n" +
-            "Dùng abstract class khi các class con có quan hệ \"is-a\" chặt chẽ.\n" +
-            "Dùng interface khi muốn định nghĩa hành vi mà nhiều class không liên quan có thể implement.",
-            2, "Trần Thị B"));
-    }
-    
-    /**
-     * Thêm trả lời mới
-     */
+  
     public synchronized TraLoi themTraLoi(TraLoi traLoi) {
-        traLoi.setMaTraLoi(maTuDong++);
-        danhSachTraLoi.put(traLoi.getMaTraLoi(), traLoi);
-        
-        // Cập nhật số lượng trả lời cho câu hỏi
-        int soLuong = layDanhSachTraLoiTheoCauHoi(traLoi.getMaCauHoi()).size();
-        CauHoiDAO.getInstance().capNhatSoLuongTraLoi(traLoi.getMaCauHoi(), soLuong);
-        
+        String sql = "INSERT INTO cau_tra_loi (maCauHoi, noiDung, maNguoiTraLoi, tenNguoiTraLoi, ngayTraLoi) VALUES (?, ?, ?, ?, ?)";
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            ps.setInt(1, traLoi.getMaCauHoi());
+            ps.setString(2, traLoi.getNoiDung());
+            ps.setInt(3, traLoi.getMaNguoiTraLoi());
+            ps.setString(4, traLoi.getTenNguoiTraLoi());
+            ps.setTimestamp(5, new Timestamp(System.currentTimeMillis()));
+            ps.executeUpdate();
+            try (ResultSet keys = ps.getGeneratedKeys()) {
+                if (keys.next()) {
+                    traLoi.setMaTraLoi(keys.getInt(1));
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    
         return traLoi;
     }
     
-    /**
-     * Lấy danh sách trả lời theo mã câu hỏi
-     */
+  
     public List<TraLoi> layDanhSachTraLoiTheoCauHoi(int maCauHoi) {
-        return danhSachTraLoi.values().stream()
-            .filter(tl -> tl.getMaCauHoi() == maCauHoi)
-            .sorted((t1, t2) -> t1.getNgayTraLoi().compareTo(t2.getNgayTraLoi()))
-            .collect(Collectors.toList());
+        String sql = "SELECT * FROM cau_tra_loi WHERE maCauHoi = ?";
+        List<TraLoi> traLoiList = new ArrayList<>();
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, maCauHoi);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    traLoiList.add(mapTraLoi(rs, conn));
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return traLoiList.stream().sorted(Comparator.comparing(TraLoi::getNgayTraLoi)).collect(Collectors.toList());
+    }
+
+
+    public TraLoi layTraLoiTheoMa(int maTraLoi) {
+        String sql = "SELECT * FROM cau_tra_loi WHERE maTraLoi = ?";
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, maTraLoi);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return mapTraLoi(rs, conn);
+                }
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        return null;
     }
     
-    /**
-     * Lấy trả lời theo mã
-     */
-    public TraLoi layTraLoiTheoMa(int maTraLoi) {
-        return danhSachTraLoi.get(maTraLoi);
+    private TraLoi mapTraLoi(ResultSet rs, Connection conn) throws SQLException {
+        TraLoi traLoi = new TraLoi(
+            rs.getInt("maTraLoi"),
+            rs.getInt("maCauHoi"),
+            rs.getString("noiDung"),
+            rs.getInt("maNguoiTraLoi"),
+            rs.getString("tenNguoiTraLoi"));
+        traLoi.setNgayTraLoi(rs.getTimestamp("ngayTraLoi"));
+        return traLoi;
     }
 }
