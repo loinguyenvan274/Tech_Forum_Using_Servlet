@@ -85,7 +85,7 @@
         
         <!-- Footer -->
         <footer class="footer">
-            <p>&copy; 2024 Diễn Đàn Công Nghệ. Xây dựng với Java Servlet MVC.</p>
+            <p>Bài tập công nghệ web [Hồ Nguyễn Thảo Nguyên, Lê Nguyễn Châu Anh, Nguyễn Văn Lợi]</p>
         </footer>
     </div>
     

@@ -1,6 +1,6 @@
-package com.diendan.dao;
+package com.diendan.Model.dao;
 
-import com.diendan.bean.CauHoi;
+import com.diendan.Model.bean.CauHoi;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -9,19 +9,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class CauHoiDAO {
-
-    private static CauHoiDAO instance;
-
-    private CauHoiDAO() {
-    }
-
-    public static synchronized CauHoiDAO getInstance() {
-        if (instance == null) {
-            instance = new CauHoiDAO();
-        }
-        return instance;
-    }
-
     // ===============================
     // 1. Thêm câu hỏi (kèm tag, cập nhật danhSachTagText)
     // ===============================
@@ -308,67 +295,48 @@ public class CauHoiDAO {
                 }
         }
     }
+
     public CauHoi layCauHoiTheoMa(int maCauHoi) {
         String sql = "SELECT * FROM cau_hoi WHERE maCauHoi = ?";
-        
+
         try (Connection conn = DBConnect.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-    
+                PreparedStatement ps = conn.prepareStatement(sql)) {
+
             ps.setInt(1, maCauHoi);
-    
+
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    return mapCauHoi(rs, conn);  
+                    return mapCauHoi(rs, conn);
                 }
             }
-    
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-    
+
         return null;
     }
-    
 
     public List<CauHoi> timKiem(String tuKhoa, String tag) {
         List<CauHoi> ds = new ArrayList<>();
-
-        StringBuilder sql = new StringBuilder(
-                "SELECT * FROM cau_hoi WHERE 1=1 ");
-
-        // Nếu có từ khóa
-        if (tuKhoa != null && !tuKhoa.trim().isEmpty()) {
-            sql.append("AND (tieuDe LIKE ? OR noiDung LIKE ? OR tenNguoiHoi LIKE ?) ");
-        }
-
-        // Nếu có tag
-        if (tag != null && !tag.trim().isEmpty()) {
-            sql.append("AND danhSachTagText LIKE ? ");
-        }
-
-        sql.append("ORDER BY ngayDang DESC");
+        String sql = "SELECT * FROM cau_hoi WHERE "
+                + "tieuDe LIKE ? OR noiDung LIKE ? OR tenNguoiHoi LIKE ? "
+                + "OR danhSachTagText LIKE ? "
+                + "ORDER BY ngayDang DESC";
 
         try (Connection conn = DBConnect.getConnection();
-                PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            int index = 1;
-
-            // Gắn giá trị từ khóa
-            if (tuKhoa != null && !tuKhoa.trim().isEmpty()) {
-                String kw = "%" + tuKhoa.trim() + "%";
-                ps.setString(index++, kw);
-                ps.setString(index++, kw);
-                ps.setString(index++, kw);
-            }
-
-            // Gắn giá trị tag
-            if (tag != null && !tag.trim().isEmpty()) {
-                ps.setString(index++, "%" + tag.trim() + "%");
-            }
+            String kw = "%" + tuKhoa + "%";
+            ps.setString(1, kw);
+            ps.setString(2, kw);
+            ps.setString(3, kw);
+            ps.setString(4, "%" + tag + "%");
 
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    ds.add(mapCauHoi(rs, conn));
+                    CauHoi c = mapCauHoi(rs, conn);
+                    ds.add(c);
                 }
             }
 
@@ -381,24 +349,23 @@ public class CauHoiDAO {
 
     private CauHoi mapCauHoi(ResultSet rs, Connection conn) throws SQLException {
         CauHoi c = new CauHoi(
-            rs.getInt("maCauHoi"),
-            rs.getString("tieuDe"),
-            rs.getString("noiDung"),
-            rs.getInt("maNguoiHoi"),
-            rs.getString("tenNguoiHoi")
-        );
-    
+                rs.getInt("maCauHoi"),
+                rs.getString("tieuDe"),
+                rs.getString("noiDung"),
+                rs.getInt("maNguoiHoi"),
+                rs.getString("tenNguoiHoi"));
+
         c.setNgayDang(rs.getTimestamp("ngayDang"));
         c.setSoLuongTraLoi(rs.getInt("soLuongTraLoi"));
-    
+
         String tagText = rs.getString("danhSachTagText");
         if (tagText != null && !tagText.trim().isEmpty()) {
             c.setDanhSachTag(parseTagText(tagText));
         } else {
             c.setDanhSachTag(layTagTheoCauHoi(c.getMaCauHoi(), conn));
         }
-    
+
         return c;
     }
-    
+
 }

@@ -1,10 +1,8 @@
-package com.diendan.dao;
+package com.diendan.Model.dao;
 
-import com.diendan.bean.TraLoi;
+import com.diendan.Model.bean.TraLoi;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import java.sql.*;
 import java.util.ArrayList;
@@ -14,17 +12,6 @@ import java.util.Comparator;
  * Class DAO để quản lý dữ liệu Câu Trả Lời (in-memory storage)
  */
 public class TraLoiDAO {
-    private static TraLoiDAO instance;
-    private TraLoiDAO() {
-    }
-    
-    public static synchronized TraLoiDAO getInstance() {
-        if (instance == null) {
-            instance = new TraLoiDAO();
-        }
-        return instance;
-    }
-    
   
     public synchronized TraLoi themTraLoi(TraLoi traLoi) {
         String sql = "INSERT INTO cau_tra_loi (maCauHoi, noiDung, maNguoiTraLoi, tenNguoiTraLoi, ngayTraLoi) VALUES (?, ?, ?, ?, ?)";

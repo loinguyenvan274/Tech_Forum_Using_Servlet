@@ -1,6 +1,6 @@
 package com.diendan.servlet;
 
-import com.diendan.dao.NguoiDungDAO;
+import com.diendan.Model.dao.NguoiDungDAO;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,7 +14,7 @@ public class TestServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         super.doGet(req, resp);
-        NguoiDungDAO.getInstance().layTatCaNguoiDung();
+//        NguoiDungDAO.getInstance().layTatCaNguoiDung();
 
     }
 }

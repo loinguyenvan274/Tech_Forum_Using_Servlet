@@ -1,7 +1,8 @@
 package com.diendan.servlet;
 
-import com.diendan.bean.TraLoi;
-import com.diendan.dao.TraLoiDAO;
+import com.diendan.Model.BO.TraLoiBO;
+import com.diendan.Model.bean.TraLoi;
+import com.diendan.Model.dao.TraLoiDAO;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,11 +16,11 @@ import java.io.IOException;
  */
 @WebServlet("/traloi")
 public class TraLoiServlet extends HttpServlet {
-    private TraLoiDAO traLoiDAO;
+    private TraLoiBO traLoiBO;
     
     @Override
     public void init() throws ServletException {
-        traLoiDAO = TraLoiDAO.getInstance();
+        traLoiBO = new TraLoiBO();
     }
     
     /**
@@ -61,7 +62,7 @@ public class TraLoiServlet extends HttpServlet {
             traLoi.setMaNguoiTraLoi(1); // Mặc định người dùng ID 1
             
             // Lưu vào database
-            traLoiDAO.themTraLoi(traLoi);
+            traLoiBO.themTraLoi(traLoi);
             
             // Chuyển hướng về trang chi tiết câu hỏi
             response.sendRedirect(request.getContextPath() + "/chitiet?ma=" + maCauHoi);

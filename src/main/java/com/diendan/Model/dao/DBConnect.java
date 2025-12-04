@@ -1,4 +1,4 @@
-package com.diendan.dao;
+package com.diendan.Model.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

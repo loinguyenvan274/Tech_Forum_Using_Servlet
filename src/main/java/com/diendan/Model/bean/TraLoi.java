@@ -1,4 +1,4 @@
-package com.diendan.bean;
+package com.diendan.Model.bean;
 
 import java.io.Serializable;
 import java.util.Date;

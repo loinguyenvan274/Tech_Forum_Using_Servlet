@@ -1,27 +1,12 @@
-package com.diendan.dao;
+package com.diendan.Model.dao;
 
-import com.diendan.bean.NguoiDung;
+import com.diendan.Model.bean.NguoiDung;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class NguoiDungDAO {
-    private static NguoiDungDAO instance;
-    
-    private NguoiDungDAO() {
-    }
-    
-    public static synchronized NguoiDungDAO getInstance() {
-        if (instance == null) {
-            instance = new NguoiDungDAO();
-        }
-        return instance;
-    }
-    
     
     public  NguoiDung themNguoiDung(NguoiDung nguoiDung) {
         String sql = "INSERT INTO nguoi_dung(tenDangNhap, tenHienThi, email, ngayThamGia, matKhau) values(?,?,?,?,?)";

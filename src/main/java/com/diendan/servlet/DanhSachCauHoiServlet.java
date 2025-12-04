@@ -1,7 +1,8 @@
 package com.diendan.servlet;
 
-import com.diendan.bean.CauHoi;
-import com.diendan.dao.CauHoiDAO;
+import com.diendan.Model.BO.CauHoiBO;
+import com.diendan.Model.bean.CauHoi;
+import com.diendan.Model.dao.CauHoiDAO;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,11 +17,11 @@ import java.util.List;
  */
 @WebServlet("/")
 public class DanhSachCauHoiServlet extends HttpServlet {
-    private CauHoiDAO cauHoiDAO;
+    private CauHoiBO cauHoiBO;
     
     @Override
     public void init() throws ServletException {
-        cauHoiDAO = CauHoiDAO.getInstance();
+        cauHoiBO = new CauHoiBO();
     }
     
     @Override
@@ -32,7 +33,7 @@ public class DanhSachCauHoiServlet extends HttpServlet {
         response.setContentType("text/html; charset=UTF-8");
         
         // Lấy danh sách tất cả câu hỏi
-        List<CauHoi> danhSachCauHoi = cauHoiDAO.layTatCaCauHoi();
+        List<CauHoi> danhSachCauHoi = cauHoiBO.layTatCaCauHoi();
         
         // Gửi dữ liệu sang View (JSP)
         request.setAttribute("danhSachCauHoi", danhSachCauHoi);

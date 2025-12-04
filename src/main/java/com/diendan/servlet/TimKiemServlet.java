@@ -1,7 +1,8 @@
 package com.diendan.servlet;
 
-import com.diendan.bean.CauHoi;
-import com.diendan.dao.CauHoiDAO;
+import com.diendan.Model.BO.CauHoiBO;
+import com.diendan.Model.bean.CauHoi;
+import com.diendan.Model.dao.CauHoiDAO;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,11 +17,11 @@ import java.util.List;
  */
 @WebServlet("/timkiem")
 public class TimKiemServlet extends HttpServlet {
-    private CauHoiDAO cauHoiDAO;
+    private CauHoiBO cauHoiBO;
     
     @Override
     public void init() throws ServletException {
-        cauHoiDAO = CauHoiDAO.getInstance();
+        cauHoiBO = new CauHoiBO()  ;
     }
     
     @Override
@@ -34,7 +35,7 @@ public class TimKiemServlet extends HttpServlet {
         String tuKhoa = request.getParameter("q");
         
         // Tìm kiếm câu hỏi
-        List<CauHoi> danhSachCauHoi = cauHoiDAO.timKiem(tuKhoa,tuKhoa);
+        List<CauHoi> danhSachCauHoi = cauHoiBO.timKiem(tuKhoa,tuKhoa);
         
         // Gửi dữ liệu sang View
         request.setAttribute("danhSachCauHoi", danhSachCauHoi);

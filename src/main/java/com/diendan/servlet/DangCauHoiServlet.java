@@ -1,7 +1,8 @@
 package com.diendan.servlet;
 
-import com.diendan.bean.CauHoi;
-import com.diendan.dao.CauHoiDAO;
+import com.diendan.Model.BO.CauHoiBO;
+import com.diendan.Model.bean.CauHoi;
+import com.diendan.Model.dao.CauHoiDAO;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,11 +18,11 @@ import java.util.List;
  */
 @WebServlet("/dangcauhoi")
 public class DangCauHoiServlet extends HttpServlet {
-    private CauHoiDAO cauHoiDAO;
+    private CauHoiBO cauHoiBO;
     
     @Override
     public void init() throws ServletException {
-        cauHoiDAO = CauHoiDAO.getInstance();
+        cauHoiBO = new CauHoiBO();
     }
     
     /**
@@ -66,23 +67,19 @@ public class DangCauHoiServlet extends HttpServlet {
             return;
         }
         
-        // Tạo câu hỏi mới
         CauHoi cauHoi = new CauHoi();
         cauHoi.setTieuDe(tieuDe.trim());
         cauHoi.setNoiDung(noiDung.trim());
         cauHoi.setTenNguoiHoi(tenNguoiHoi.trim());
-        cauHoi.setMaNguoiHoi(1); // Mặc định người dùng ID 1
+        cauHoi.setMaNguoiHoi(1); // Mặc định người dùng ID 1 
         
-        // Xử lý tags (phân tách bằng dấu phẩy)
         if (tags != null && !tags.trim().isEmpty()) {
             List<String> danhSachTag = Arrays.asList(tags.split(","));
             cauHoi.setDanhSachTag(danhSachTag);
         }
         
-        // Lưu vào database
-        cauHoiDAO.themCauHoi(cauHoi);
+        cauHoiBO.themCauHoi(cauHoi);
         
-        // Chuyển hướng về trang chủ
         response.sendRedirect(request.getContextPath() + "/");
     }
 }

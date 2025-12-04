@@ -1,9 +1,11 @@
 package com.diendan.servlet;
 
-import com.diendan.bean.CauHoi;
-import com.diendan.bean.TraLoi;
-import com.diendan.dao.CauHoiDAO;
-import com.diendan.dao.TraLoiDAO;
+import com.diendan.Model.BO.CauHoiBO;
+import com.diendan.Model.BO.TraLoiBO;
+import com.diendan.Model.bean.CauHoi;
+import com.diendan.Model.bean.TraLoi;
+import com.diendan.Model.dao.CauHoiDAO;
+import com.diendan.Model.dao.TraLoiDAO;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,13 +18,13 @@ import java.util.List;
 
 @WebServlet("/chitiet")
 public class ChiTietCauHoiServlet extends HttpServlet {
-    private CauHoiDAO cauHoiDAO;
-    private TraLoiDAO traLoiDAO;
+    private CauHoiBO cauHoiBO;
+    private TraLoiBO traLoiBO;
     
     @Override
     public void init() throws ServletException {
-        cauHoiDAO = CauHoiDAO.getInstance();
-        traLoiDAO = TraLoiDAO.getInstance();
+        cauHoiBO = new CauHoiBO();
+        traLoiBO = new TraLoiBO();
     }
     
     @Override
@@ -32,8 +34,7 @@ public class ChiTietCauHoiServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
         response.setContentType("text/html; charset=UTF-8");
-        
-        // Lấy mã câu hỏi từ parameter
+
         String maCauHoiStr = request.getParameter("ma");
         
         if (maCauHoiStr == null || maCauHoiStr.isEmpty()) {
@@ -45,7 +46,7 @@ public class ChiTietCauHoiServlet extends HttpServlet {
             int maCauHoi = Integer.parseInt(maCauHoiStr);
             
             // Lấy thông tin câu hỏi
-            CauHoi cauHoi = cauHoiDAO.layCauHoiTheoMa(maCauHoi);
+            CauHoi cauHoi = cauHoiBO.layCauHoiTheoMa(maCauHoi);
             
             if (cauHoi == null) {
                 response.sendRedirect(request.getContextPath() + "/");
@@ -53,7 +54,7 @@ public class ChiTietCauHoiServlet extends HttpServlet {
             }
             
             // Lấy danh sách trả lời
-            List<TraLoi> danhSachTraLoi = traLoiDAO.layDanhSachTraLoiTheoCauHoi(maCauHoi);
+            List<TraLoi> danhSachTraLoi = traLoiBO.layDanhSachTraLoiTheoCauHoi(maCauHoi);
             
             // Gửi dữ liệu sang View
             request.setAttribute("cauHoi", cauHoi);
