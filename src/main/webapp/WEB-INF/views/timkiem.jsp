@@ -88,7 +88,6 @@
             <p>Bài tập công nghệ web [Hồ Nguyễn Thảo Nguyên, Lê Nguyễn Châu Anh, Nguyễn Văn Lợi]</p>
         </footer>
     </div>
-    
     <script src="${pageContext.request.contextPath}/js/main.js"></script>
 </body>
 </html>

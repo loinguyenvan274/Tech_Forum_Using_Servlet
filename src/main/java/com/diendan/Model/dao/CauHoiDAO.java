@@ -28,8 +28,7 @@ public class CauHoiDAO {
                 ps.setTimestamp(5, new Timestamp(System.currentTimeMillis()));
                 ps.setInt(6, 0);
 
-                // nếu đã có danhSachTagText từ object thì dùng, còn không thì tạo từ
-                // danhSachTag
+
                 String tagText = buildTagText(cauHoi.getDanhSachTag());
                 ps.setString(7, tagText);
 

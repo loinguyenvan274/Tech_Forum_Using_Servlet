@@ -22,7 +22,6 @@ public class TraLoiServlet extends HttpServlet {
     public void init() throws ServletException {
         traLoiBO = new TraLoiBO();
     }
-    
     /**
      * Xử lý submit form trả lời
      */
